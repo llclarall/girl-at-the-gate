@@ -43,9 +43,20 @@ public class PlayerInteraction : MonoBehaviour
 
     public void OnInteract(InputValue value)
     {
-        if (value.isPressed && _currentInteractable != null)
+        Debug.Log("Appui sur E détecté !");
+        
+        if (value.isPressed)
         {
-            _currentInteractable.Interact();
+            if (uiSystem != null && uiSystem.IsBookOpen())
+            {
+                uiSystem.ShowBook(false);
+                return;
+            }
+
+            if (_currentInteractable != null)
+            {
+                _currentInteractable.Interact();
+            }
         }
     }
 }
