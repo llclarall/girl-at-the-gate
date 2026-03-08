@@ -1,42 +1,39 @@
 using UnityEngine;
+using UnityEngine.UI; 
 using TMPro;
 
 public class UISystem : MonoBehaviour
 {
-    [SerializeField] private GameObject InteractionPrompt;
-    [SerializeField] private GameObject BookUI; 
-    [SerializeField] private GameObject PictureUI;
+    [SerializeField] private GameObject interactionPrompt;
+    [SerializeField] private GameObject objectPanel; 
+    
+    [SerializeField] private Image displayImage; 
+    [SerializeField] private TextMeshProUGUI displayText;
 
-    private bool _isBookOpen = false;
-    private bool _isPictureOpen = false;
+    private bool _isObjectOpen = false;
 
     public void ToggleInteractionPrompt(bool isActive)
     {
-        if (_isBookOpen && isActive) return; 
-        
-        if (InteractionPrompt != null)
-            InteractionPrompt.SetActive(isActive);
+        if (_isObjectOpen && isActive) return; 
+        if (interactionPrompt != null) interactionPrompt.SetActive(isActive);
     }
 
-    public void ShowBook(bool show)
+// interaction system 
+    public void OpenDisplay(Sprite photo, string message)
     {
-        _isBookOpen = show;
-        if (BookUI != null)
-            BookUI.SetActive(show);
-        
-        if (show) ToggleInteractionPrompt(false);
+        _isObjectOpen = true;
+        objectPanel.SetActive(true);
+        ToggleInteractionPrompt(false);
+
+        if (displayImage != null) displayImage.sprite = photo;
+        if (displayText != null) displayText.text = message;
     }
 
-    public bool IsBookOpen() => _isBookOpen;
-
-    public void ShowPicture(bool show)
+    public void CloseDisplay()
     {
-       _isPictureOpen = show;
-        if (PictureUI != null)
-            PictureUI.SetActive(show);
-        
-        if (show) ToggleInteractionPrompt(false);
+        _isObjectOpen = false;
+        objectPanel.SetActive(false);
     }
 
-    public bool IsPictureOpen() => _isPictureOpen;
+    public bool IsObjectOpen() => _isObjectOpen;
 }

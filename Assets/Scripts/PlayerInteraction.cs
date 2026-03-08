@@ -1,13 +1,13 @@
 using UnityEngine;
-using UnityEngine.InputSystem; 
+using UnityEngine.InputSystem;
 
 public class PlayerInteraction : MonoBehaviour
 {
     public float InteractionDistance = 3f;
     public LayerMask InteractableLayer;
     public UISystem uiSystem;
-    public Transform InteractionSource; 
-    
+    public Transform InteractionSource;
+
     private IInteractable _currentInteractable;
 
     void Update()
@@ -17,14 +17,13 @@ public class PlayerInteraction : MonoBehaviour
 
     private void CheckForInteractable()
     {
-        // Crée une "bulle" invisible autour du joueur
+        // creates a sphere around the player to detect interactable objects
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, InteractionDistance, InteractableLayer);
-        
+
         if (hitColliders.Length > 0)
         {
-            // On prend le premier objet interactif trouvé dans la bulle
             IInteractable interactable = hitColliders[0].GetComponent<IInteractable>();
-            
+
             if (interactable != null && interactable != _currentInteractable)
             {
                 _currentInteractable?.ShowAffordance(false);
@@ -44,12 +43,12 @@ public class PlayerInteraction : MonoBehaviour
     public void OnInteract(InputValue value)
     {
         Debug.Log("Appui sur E détecté !");
-        
+
         if (value.isPressed)
         {
-            if (uiSystem != null && uiSystem.IsBookOpen())
+            if (uiSystem != null && uiSystem.IsObjectOpen())
             {
-                uiSystem.ShowBook(false);
+                uiSystem.CloseDisplay();
                 return;
             }
 
@@ -59,4 +58,6 @@ public class PlayerInteraction : MonoBehaviour
             }
         }
     }
+
+
 }

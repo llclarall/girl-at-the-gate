@@ -1,9 +1,13 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class InteractableObject : MonoBehaviour, IInteractable
 {
-    [SerializeField] private GameObject highlightHalo; // Assigne ici ton halo (Point Light ou mesh)
-    [SerializeField] private UnityEngine.Events.UnityEvent onInteract;
+    [SerializeField] private GameObject highlightHalo;
+    
+    [Header("Contenu de l'interaction")]
+    public Sprite imageToDisplay; 
+    [TextArea] public string textToDisplay; 
 
     public void ShowAffordance(bool show)
     {
@@ -12,7 +16,10 @@ public class InteractableObject : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        onInteract?.Invoke();
-        Debug.Log("Interaction avec : " + gameObject.name);
+        UISystem ui = Object.FindAnyObjectByType<UISystem>();
+        if (ui != null)
+        {
+            ui.OpenDisplay(imageToDisplay, textToDisplay);
+        }
     }
 }
