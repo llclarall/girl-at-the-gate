@@ -3936,9 +3936,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractableObject
   highlightHalo: {fileID: 118905242}
-  onInteract:
-    m_PersistentCalls:
-      m_Calls: []
+  imageToDisplay: {fileID: 0}
+  textToDisplay: 
 --- !u!1 &1981113231
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,10 +18,13 @@ public class PlayerInteraction : MonoBehaviour
     private void CheckForInteractable()
     {
         // creates a sphere around the player to detect interactable objects
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, InteractionDistance, InteractableLayer);
+        Collider[] hitColliders = Physics.OverlapSphere(InteractionSource.position, InteractionDistance, InteractableLayer);
 
         if (hitColliders.Length > 0)
         {
+            Debug.DrawRay(InteractionSource.position, InteractionSource.forward * InteractionDistance, Color.red);
+            Debug.DrawLine(InteractionSource.position, InteractionSource.position + Vector3.right * InteractionDistance, Color.red);
+            
             IInteractable interactable = hitColliders[0].GetComponent<IInteractable>();
 
             if (interactable != null && interactable != _currentInteractable)
@@ -38,6 +41,8 @@ public class PlayerInteraction : MonoBehaviour
             _currentInteractable = null;
             uiSystem.ToggleInteractionPrompt(false);
         }
+
+        
     }
 
     public void OnInteract(InputValue value)
@@ -59,5 +64,13 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
 
+    private void OnDrawGizmosSelected()
+    {
+        if (InteractionSource != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(InteractionSource.position, InteractionDistance);
+        }
+    }
 
 }

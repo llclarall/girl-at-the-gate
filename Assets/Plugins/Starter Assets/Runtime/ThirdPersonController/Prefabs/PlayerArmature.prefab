@@ -1314,11 +1314,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c87e380048c9d374d9faadce35456dd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteraction
-  interactionDistance: 5
-  interactableLayer:
+  InteractionDistance: 3
+  InteractableLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   uiSystem: {fileID: 0}
+  InteractionSource: {fileID: 0}
 --- !u!1 &4523139366846529165
 GameObject:
   m_ObjectHideFlags: 0

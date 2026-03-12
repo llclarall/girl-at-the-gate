@@ -6,7 +6,7 @@ public class CameraFollow : MonoBehaviour
 {
     public Transform player;
     private Vector3 offset;
-    private float maxCameraX = 8.4f + 5f; // limit to the right of the cabin so the camera doesn't show outside of the cabin
+    private float maxCameraX = 5.3f + 5f; // limit to the right of the cabin so the camera doesn't show outside of the cabin
     private float minCameraX = -3f + 5f; // limit to the left of the cabin
 
     void Start()
@@ -14,7 +14,7 @@ public class CameraFollow : MonoBehaviour
         if (player != null)
         {
             offset = transform.position - player.position;
-            maxCameraX = 8.4f + offset.x;
+            maxCameraX = 5.4f + offset.x;
             minCameraX = -3f + offset.x;
         }
     }

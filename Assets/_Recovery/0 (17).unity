@@ -2442,8 +2442,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80c7cd6a0846811439ff275e7c7fe5a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UISystem
-  InteractionPrompt: {fileID: 648286354}
-  BookUI: {fileID: 789461683}
+  interactionPrompt: {fileID: 0}
+  objectPanel: {fileID: 0}
+  displayImage: {fileID: 0}
+  displayText: {fileID: 0}
 --- !u!4 &1153493344
 Transform:
   m_ObjectHideFlags: 0
@@ -4261,21 +4263,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractableObject
   highlightHalo: {fileID: 118905242}
-  onInteract:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1153493343}
-        m_TargetAssemblyTypeName: UISystem, Assembly-CSharp
-        m_MethodName: ShowBook
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+  imageToDisplay: {fileID: 0}
+  textToDisplay: 
 --- !u!1 &1981113231
 GameObject:
   m_ObjectHideFlags: 0
