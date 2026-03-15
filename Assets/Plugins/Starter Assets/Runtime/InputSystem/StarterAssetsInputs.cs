@@ -13,12 +13,21 @@ namespace StarterAssets
 		public bool jump;
 		public bool sprint;
 
+		[Header("Fallback Inputs")]
+		public bool enableJumpKeyboardFallback = true;
+		public bool enableJumpControllerFallback = true;
+		public bool enableOscMovement = true;
+
 		[Header("Movement Settings")]
 		public bool analogMovement;
 
 		[Header("Mouse Cursor Settings")]
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
+
+		private Vector2 _moveFromInputAction;
+		private Vector2 _moveFromOsc;
+		private bool _jumpFromInputAction;
 
 #if ENABLE_INPUT_SYSTEM
 		public void OnMove(InputValue value)
@@ -36,6 +45,7 @@ namespace StarterAssets
 
 		public void OnJump(InputValue value)
 		{
+			_jumpFromInputAction = value.isPressed;
 			JumpInput(value.isPressed);
 		}
 
@@ -48,8 +58,9 @@ namespace StarterAssets
 
 		public void MoveInput(Vector2 newMoveDirection)
 		{
-			move = newMoveDirection;
-		} 
+			_moveFromInputAction = newMoveDirection;
+			UpdateResolvedMove();
+		}
 
 		public void LookInput(Vector2 newLookDirection)
 		{
@@ -58,6 +69,7 @@ namespace StarterAssets
 
 		public void JumpInput(bool newJumpState)
 		{
+			_jumpFromInputAction = newJumpState;
 			jump = newJumpState;
 		}
 
@@ -65,7 +77,7 @@ namespace StarterAssets
 		{
 			sprint = newSprintState;
 		}
-		
+
 		private void OnApplicationFocus(bool hasFocus)
 		{
 			SetCursorState(cursorLocked);
@@ -75,6 +87,109 @@ namespace StarterAssets
 		{
 			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
 		}
+
+		private void Update()
+		{
+			UpdateResolvedMove();
+			UpdateJumpFallback();
+		}
+
+		private void UpdateResolvedMove()
+		{
+			move = _moveFromInputAction;
+
+			if (enableOscMovement && _moveFromOsc != Vector2.zero)
+			{
+				move = _moveFromOsc;
+			}
+		}
+
+		private void UpdateJumpFallback()
+		{
+			bool keyboardPressed = false;
+			bool controllerPressed = false;
+
+#if ENABLE_INPUT_SYSTEM
+			if (enableJumpKeyboardFallback)
+			{
+				Keyboard keyboard = Keyboard.current;
+				keyboardPressed = keyboard != null && keyboard.spaceKey.isPressed;
+			}
+
+			if (enableJumpControllerFallback)
+			{
+				Gamepad gamepad = Gamepad.current;
+				controllerPressed = gamepad != null && gamepad.buttonSouth.isPressed;
+
+				Joystick joystick = Joystick.current;
+				controllerPressed = controllerPressed || (joystick != null && joystick.trigger != null && joystick.trigger.isPressed);
+			}
+#else
+			keyboardPressed = enableJumpKeyboardFallback && Input.GetKey(KeyCode.Space);
+			controllerPressed = enableJumpControllerFallback && Input.GetKey(KeyCode.JoystickButton0);
+#endif
+
+			bool fallbackJumpPressed = keyboardPressed || controllerPressed;
+			jump = _jumpFromInputAction || fallbackJumpPressed;
+		}
+
+		public void OnOscMoveHorizontal(float value)
+		{
+			SetOscHorizontal(Mathf.Clamp(value, -1f, 1f));
+		}
+
+		public void OnOscMoveVertical(float value)
+		{
+			SetOscVertical(Mathf.Clamp(value, -1f, 1f));
+		}
+
+		public void OnOscMoveHorizontalInt(int value)
+		{
+			SetOscHorizontal(Mathf.Clamp(value, -1, 1));
+		}
+
+		public void OnOscMoveVerticalInt(int value)
+		{
+			SetOscVertical(Mathf.Clamp(value, -1, 1));
+		}
+
+		public void OnOscMoveLeft()
+		{
+			SetOscHorizontal(-1f);
+		}
+
+		public void OnOscMoveRight()
+		{
+			SetOscHorizontal(1f);
+		}
+
+		public void OnOscMoveForward()
+		{
+			SetOscVertical(1f);
+		}
+
+		public void OnOscMoveBackward()
+		{
+			SetOscVertical(-1f);
+		}
+
+		public void OnOscMoveStop()
+		{
+			_moveFromOsc = Vector2.zero;
+			UpdateResolvedMove();
+		}
+
+		private void SetOscHorizontal(float value)
+		{
+			_moveFromOsc.x = value;
+			UpdateResolvedMove();
+		}
+
+		private void SetOscVertical(float value)
+		{
+			_moveFromOsc.y = value;
+			UpdateResolvedMove();
+		}
 	}
-	
+
 }

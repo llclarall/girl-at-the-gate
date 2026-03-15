@@ -466,10 +466,10 @@
                 {
                     "name": "",
                     "id": "a5e3885e-166d-485e-9b0e-2eba7ec5ee4d",
-                    "path": "",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Gamepad",
                     "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
