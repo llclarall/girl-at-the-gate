@@ -1307,6 +1307,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraFollow
   player: {fileID: 890252681}
+  boundedSceneNames:
+  - CabinScene
+  - CabinScene 1
 --- !u!1001 &335723962
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3117,6 +3120,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 848d308680855754fbe95ad224c4e356, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExitDoor
+  closedMaterial: {fileID: 0}
+  openedMaterial: {fileID: 0}
 --- !u!1 &1300293871
 GameObject:
   m_ObjectHideFlags: 0

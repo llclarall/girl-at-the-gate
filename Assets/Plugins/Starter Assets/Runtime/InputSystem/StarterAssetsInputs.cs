@@ -113,24 +113,25 @@ namespace StarterAssets
 			if (enableJumpKeyboardFallback)
 			{
 				Keyboard keyboard = Keyboard.current;
-				keyboardPressed = keyboard != null && keyboard.spaceKey.isPressed;
+				keyboardPressed = keyboard != null && keyboard.spaceKey.wasPressedThisFrame;
 			}
 
 			if (enableJumpControllerFallback)
 			{
 				Gamepad gamepad = Gamepad.current;
-				controllerPressed = gamepad != null && gamepad.buttonSouth.isPressed;
+				controllerPressed = gamepad != null && gamepad.buttonSouth.wasPressedThisFrame;
 
 				Joystick joystick = Joystick.current;
-				controllerPressed = controllerPressed || (joystick != null && joystick.trigger != null && joystick.trigger.isPressed);
+				controllerPressed = controllerPressed || (joystick != null && joystick.trigger != null && joystick.trigger.wasPressedThisFrame);
 			}
 #else
-			keyboardPressed = enableJumpKeyboardFallback && Input.GetKey(KeyCode.Space);
-			controllerPressed = enableJumpControllerFallback && Input.GetKey(KeyCode.JoystickButton0);
+			keyboardPressed = enableJumpKeyboardFallback && Input.GetKeyDown(KeyCode.Space);
+			controllerPressed = enableJumpControllerFallback && Input.GetKeyDown(KeyCode.JoystickButton0);
 #endif
 
 			bool fallbackJumpPressed = keyboardPressed || controllerPressed;
-			jump = _jumpFromInputAction || fallbackJumpPressed;
+			if (fallbackJumpPressed)
+				jump = true;
 		}
 
 		public void OnOscMoveHorizontal(float value)

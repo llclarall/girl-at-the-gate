@@ -1165,6 +1165,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraFollow
   player: {fileID: 890252681}
+  boundedSceneNames:
+  - CabinScene
+  - CabinScene 1
 --- !u!1001 &335723962
 PrefabInstance:
   m_ObjectHideFlags: 0
