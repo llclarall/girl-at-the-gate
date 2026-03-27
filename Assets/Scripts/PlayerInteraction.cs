@@ -100,6 +100,22 @@ public class PlayerInteraction : MonoBehaviour
         TryInteract();
     }
 
+    // French aliases for easier direct mapping from Chataigne labels.
+    public void OnOscInteragir(float value)
+    {
+        OnOscInteract(value);
+    }
+
+    public void OnOscInteragirInt(int value)
+    {
+        OnOscInteractInt(value);
+    }
+
+    public void OnOscInteragirBang()
+    {
+        OnOscInteractBang();
+    }
+
     private void TryInteract()
     {
         // Prevent double trigger when multiple input paths fire in the same frame.

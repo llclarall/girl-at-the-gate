@@ -18,6 +18,10 @@ namespace StarterAssets
         [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
 
+        [Header("Movement Axis")]
+        [Tooltip("If true, movement is limited to one axis (platform section style).")]
+        public bool RestrictToXAxis = true;
+
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
 
@@ -218,7 +222,9 @@ namespace StarterAssets
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
-            Vector2 moveInput = new Vector2(_input.move.x, 0.0f);
+            Vector2 moveInput = RestrictToXAxis
+                ? new Vector2(_input.move.x, 0.0f)
+                : _input.move;
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is no input, set the target speed to 0
@@ -250,8 +256,7 @@ namespace StarterAssets
             _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
             if (_animationBlend < 0.01f) _animationBlend = 0f;
 
-            // On force le Y à 0 pour ne garder que le mouvement gauche/droite (X de l'input devient X du monde)
-            Vector3 inputDirection = new Vector3(moveInput.x, 0.0f, 0.0f).normalized;
+            Vector3 inputDirection = new Vector3(moveInput.x, 0.0f, moveInput.y).normalized;
 
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving

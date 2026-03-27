@@ -17,6 +17,8 @@ namespace StarterAssets
 		public bool enableJumpKeyboardFallback = true;
 		public bool enableJumpControllerFallback = true;
 		public bool enableOscMovement = true;
+		public bool enableOscJump = true;
+		public float oscPressedThreshold = 0.5f;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -28,6 +30,8 @@ namespace StarterAssets
 		private Vector2 _moveFromInputAction;
 		private Vector2 _moveFromOsc;
 		private bool _jumpFromInputAction;
+		private bool _jumpFromOsc;
+		private bool _wasOscJumpPressed;
 
 #if ENABLE_INPUT_SYSTEM
 		public void OnMove(InputValue value)
@@ -130,8 +134,58 @@ namespace StarterAssets
 #endif
 
 			bool fallbackJumpPressed = keyboardPressed || controllerPressed;
-			if (fallbackJumpPressed)
+			if (fallbackJumpPressed || _jumpFromOsc)
 				jump = true;
+
+			// Keep OSC jump as a one-shot press, similar to button down behavior.
+			_jumpFromOsc = false;
+		}
+
+		public void OnOscJump(float value)
+		{
+			if (!enableOscJump)
+			{
+				return;
+			}
+
+			bool isPressed = value >= oscPressedThreshold;
+			if (isPressed && !_wasOscJumpPressed)
+			{
+				_jumpFromOsc = true;
+			}
+
+			_wasOscJumpPressed = isPressed;
+		}
+
+		public void OnOscJumpInt(int value)
+		{
+			OnOscJump(value);
+		}
+
+		public void OnOscJumpBang()
+		{
+			if (!enableOscJump)
+			{
+				return;
+			}
+
+			_jumpFromOsc = true;
+		}
+
+		// French aliases for easier direct mapping from Chataigne labels.
+		public void OnOscSauter(float value)
+		{
+			OnOscJump(value);
+		}
+
+		public void OnOscSauterInt(int value)
+		{
+			OnOscJumpInt(value);
+		}
+
+		public void OnOscSauterBang()
+		{
+			OnOscJumpBang();
 		}
 
 		public void OnOscMoveHorizontal(float value)
