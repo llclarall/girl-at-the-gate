@@ -18,6 +18,8 @@ public class PlayerInteraction : MonoBehaviour
     private bool _wasOscPressed;
     private int _lastInteractionFrame = -1;
 
+    private Transform EffectiveInteractionSource => InteractionSource != null ? InteractionSource : transform;
+
     void Update()
     {
         CheckForInteractable();
@@ -35,26 +37,63 @@ public class PlayerInteraction : MonoBehaviour
 
     private void CheckForInteractable()
     {
-        if (InteractionSource == null || uiSystem == null)
+        if (EffectiveInteractionSource == null)
         {
             return;
         }
 
         // creates a sphere around the player to detect interactable objects
-        Collider[] hitColliders = Physics.OverlapSphere(InteractionSource.position, InteractionDistance, InteractableLayer);
+        Collider[] hitColliders = Physics.OverlapSphere(EffectiveInteractionSource.position, InteractionDistance, InteractableLayer);
+        IInteractable nearestInteractable = null;
+        float nearestSqrDistance = float.MaxValue;
 
         if (hitColliders.Length > 0)
         {
-            Debug.DrawRay(InteractionSource.position, InteractionSource.forward * InteractionDistance, Color.red);
-            Debug.DrawLine(InteractionSource.position, InteractionSource.position + Vector3.right * InteractionDistance, Color.red);
+            Debug.DrawRay(EffectiveInteractionSource.position, EffectiveInteractionSource.forward * InteractionDistance, Color.red);
+            Debug.DrawLine(EffectiveInteractionSource.position, EffectiveInteractionSource.position + Vector3.right * InteractionDistance, Color.red);
 
-            IInteractable interactable = hitColliders[0].GetComponent<IInteractable>();
+            for (int i = 0; i < hitColliders.Length; i++)
+            {
+                Collider hitCollider = hitColliders[i];
 
-            if (interactable != null && interactable != _currentInteractable)
+                if (hitCollider == null)
+                {
+                    continue;
+                }
+
+                IInteractable interactable = hitCollider.GetComponent<IInteractable>();
+
+                if (interactable == null)
+                {
+                    interactable = hitCollider.GetComponentInParent<IInteractable>();
+                }
+
+                if (interactable == null)
+                {
+                    continue;
+                }
+
+                float sqrDistance = (hitCollider.transform.position - EffectiveInteractionSource.position).sqrMagnitude;
+
+                if (sqrDistance < nearestSqrDistance)
+                {
+                    nearestSqrDistance = sqrDistance;
+                    nearestInteractable = interactable;
+                }
+            }
+        }
+
+        if (nearestInteractable != null)
+        {
+            if (nearestInteractable != _currentInteractable)
             {
                 _currentInteractable?.ShowAffordance(false);
-                _currentInteractable = interactable;
+                _currentInteractable = nearestInteractable;
                 _currentInteractable.ShowAffordance(true);
+            }
+
+            if (uiSystem != null)
+            {
                 uiSystem.ToggleInteractionPrompt(true);
             }
         }
@@ -62,7 +101,11 @@ public class PlayerInteraction : MonoBehaviour
         {
             _currentInteractable.ShowAffordance(false);
             _currentInteractable = null;
-            uiSystem.ToggleInteractionPrompt(false);
+
+            if (uiSystem != null)
+            {
+                uiSystem.ToggleInteractionPrompt(false);
+            }
         }
 
 
@@ -157,10 +200,10 @@ public class PlayerInteraction : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        if (InteractionSource != null)
+        if (EffectiveInteractionSource != null)
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(InteractionSource.position, InteractionDistance);
+            Gizmos.DrawWireSphere(EffectiveInteractionSource.position, InteractionDistance);
         }
     }
 

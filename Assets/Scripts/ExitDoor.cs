@@ -12,13 +12,27 @@ public class ExitDoor : MonoBehaviour, IInteractable
     void Start()
     {
         _renderer = GetComponent<Renderer>();
-        _renderer.material = closedMaterial;
+
+        if (_renderer == null)
+        {
+            _renderer = GetComponentInChildren<Renderer>();
+        }
+
+        if (_renderer != null && closedMaterial != null)
+        {
+            _renderer.material = closedMaterial;
+        }
     }
 
     public void Unlock()
     {
         isUnlocked = true;
-        _renderer.material = openedMaterial;
+
+        if (_renderer != null && openedMaterial != null)
+        {
+            _renderer.material = openedMaterial;
+        }
+
         Debug.Log("La porte est maintenant déverrouillée !");
     }
 
@@ -26,6 +40,12 @@ public class ExitDoor : MonoBehaviour, IInteractable
     {
         if (isUnlocked)
         {
+            if (GameManager.Instance == null)
+            {
+                Debug.LogError("GameManager introuvable dans la scène. Impossible de charger la scène suivante.");
+                return;
+            }
+
             string nextScene = GameManager.Instance.nextSceneName;
 
             if (!string.IsNullOrEmpty(nextScene))
