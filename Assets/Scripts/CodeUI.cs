@@ -1,9 +1,11 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class CodeUI : MonoBehaviour
 {
     public TMP_InputField codeInputField;
+    public TextMeshProUGUI statusText;
     public ChestLock currentChest;
     private const int MAX_CODE_LENGTH = 4;
 
@@ -19,16 +21,25 @@ public class CodeUI : MonoBehaviour
 
     public void OnClickValidate()
     {
-        if (currentChest != null && codeInputField != null)
+        if (codeInputField.text == currentChest.correctCode)
         {
             currentChest.CheckCode(codeInputField.text);
-
-            if (codeInputField.text != currentChest.correctCode)
-            {
-                codeInputField.text = "";
-                codeInputField.ActivateInputField();
-            }
         }
+        else
+        {
+            StartCoroutine(ShowFeedback("Code incorrect...", Color.red));
+            codeInputField.text = "";
+        }
+    }
+
+    IEnumerator ShowFeedback(string message, Color color)
+    {
+        statusText.text = message;
+        statusText.color = color;
+        
+        yield return new WaitForSeconds(3f);
+        
+        statusText.text = "";
     }
 
     public void OnClickNumber(int number)

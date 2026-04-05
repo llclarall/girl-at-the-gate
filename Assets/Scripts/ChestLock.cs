@@ -29,7 +29,6 @@ public class ChestLock : MonoBehaviour, IInteractable
     {
         if (!isOpened)
         {
-            // On affiche l'interface et on débloque la souris
             codePanel.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -48,7 +47,6 @@ public class ChestLock : MonoBehaviour, IInteractable
         else
         {
             Debug.Log("Mauvais code...");
-            // Logique pour effacer les chiffres (voir script UI après)
         }
     }
 
@@ -56,7 +54,7 @@ public class ChestLock : MonoBehaviour, IInteractable
     {
         isOpened = true;
         codePanel.SetActive(false);
-        itemInside.SetActive(true); // Fait apparaître le contenu
+        itemInside.SetActive(true); 
 
         Cursor.lockState = CursorLockMode.Locked;
         FreezeMovement(false);
