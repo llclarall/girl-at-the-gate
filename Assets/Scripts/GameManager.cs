@@ -22,6 +22,14 @@ public class GameManager : MonoBehaviour
         if (Instance == null) Instance = this;
     }
 
+    public void PlayGame()
+    {
+        if (!string.IsNullOrEmpty(nextSceneName))
+        {
+            SceneManager.LoadScene(nextSceneName);
+        }
+    }
+
     public void ObjectInteracted()
     {
         _objectsFound++;

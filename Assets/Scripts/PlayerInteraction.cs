@@ -14,11 +14,23 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] private bool enableControllerFallback = true;
     [SerializeField] private float oscPressedThreshold = 0.5f;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource interactionAudioSource;
+    [SerializeField] private AudioClip interactionSound;
+
     private IInteractable _currentInteractable;
     private bool _wasOscPressed;
     private int _lastInteractionFrame = -1;
 
     private Transform EffectiveInteractionSource => InteractionSource != null ? InteractionSource : transform;
+
+    private void Awake()
+    {
+        if (interactionAudioSource == null)
+        {
+            interactionAudioSource = GetComponent<AudioSource>();
+        }
+    }
 
     void Update()
     {
@@ -177,8 +189,25 @@ public class PlayerInteraction : MonoBehaviour
 
         if (_currentInteractable != null)
         {
+            PlayInteractionSound();
             _currentInteractable.Interact();
         }
+    }
+
+    private void PlayInteractionSound()
+    {
+        if (interactionSound == null)
+        {
+            return;
+        }
+
+        if (interactionAudioSource != null && interactionAudioSource.isActiveAndEnabled)
+        {
+            interactionAudioSource.PlayOneShot(interactionSound);
+            return;
+        }
+
+        AudioSource.PlayClipAtPoint(interactionSound, EffectiveInteractionSource.position);
     }
 
     private bool IsControllerInteractPressedThisFrame()

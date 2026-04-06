@@ -11,7 +11,6 @@ public class CodeUI : MonoBehaviour
 
     private void OnEnable()
     {
-        // Active l'input field et le met en focus
         if (codeInputField != null)
         {
             codeInputField.text = "";
@@ -68,11 +67,6 @@ public class CodeUI : MonoBehaviour
         if (codeInputField != null)
         {
             codeInputField.text = "";
-        }
-
-        if (currentChest != null)
-        {
-            currentChest.FreezeMovement(false);
         }
 
         gameObject.SetActive(false);

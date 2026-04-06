@@ -9,7 +9,10 @@ public class ChestLock : MonoBehaviour, IInteractable
 
     private bool isOpened = false;
     private StarterAssetsInputs _input;
-    private bool _isMovementFrozen = false;
+    private bool _previousCursorInputForLook;
+    private bool _previousOscMovementEnabled;
+    public AudioSource chestAudioSource;
+    public AudioClip interactionSound;
 
     private void Start()
     {
@@ -18,11 +21,7 @@ public class ChestLock : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        // Bloque les mouvements tant que le panel est ouvert
-        if (_isMovementFrozen && _input != null)
-        {
-            _input.MoveInput(Vector2.zero);
-        }
+        
     }
 
     public void Interact()
@@ -33,7 +32,11 @@ public class ChestLock : MonoBehaviour, IInteractable
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
 
-            FreezeMovement(true);
+            if (chestAudioSource != null && interactionSound != null)
+            {
+                chestAudioSource.PlayOneShot(interactionSound);
+                Debug.Log("Son d'interaction joué !");
+            }
         }
     }
 
@@ -54,15 +57,10 @@ public class ChestLock : MonoBehaviour, IInteractable
     {
         isOpened = true;
         codePanel.SetActive(false);
-        itemInside.SetActive(true); 
+        itemInside.SetActive(true);
 
         Cursor.lockState = CursorLockMode.Locked;
-        FreezeMovement(false);
-    }
-
-    public void FreezeMovement(bool freeze)
-    {
-        _isMovementFrozen = freeze;
+        Cursor.visible = false;
     }
 
     public void ShowAffordance(bool show)
