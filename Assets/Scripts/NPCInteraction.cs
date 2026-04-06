@@ -1,13 +1,13 @@
 using UnityEngine;
 using TMPro;
-using System; 
+using System;
 
-[Serializable] 
+[Serializable]
 public class DialogueLine
 {
-    public string name;     
+    public string name;
     [TextArea(2, 5)]
-    public string text;     
+    public string text;
 }
 
 public class NPCInteraction : MonoBehaviour, IInteractable
@@ -18,7 +18,7 @@ public class NPCInteraction : MonoBehaviour, IInteractable
     public TextMeshProUGUI nameText;
 
     [Header("Dialogue Content")]
-    public DialogueLine[] conversation; 
+    public DialogueLine[] conversation;
 
     private int _index = 0;
 
@@ -38,7 +38,7 @@ public class NPCInteraction : MonoBehaviour, IInteractable
     {
         _index = 0;
         dialoguePanel.SetActive(true);
-        
+
 
         DisplayCurrentLine();
 
@@ -69,11 +69,14 @@ public class NPCInteraction : MonoBehaviour, IInteractable
     void EndDialogue()
     {
         dialoguePanel.SetActive(false);
-        
+
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
     public void ShowAffordance(bool show) { }
+
+    public bool CanInteract() => true;
+
 }

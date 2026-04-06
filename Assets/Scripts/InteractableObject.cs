@@ -4,10 +4,10 @@ using UnityEngine.Events;
 public class InteractableObject : MonoBehaviour, IInteractable
 {
     [SerializeField] private GameObject highlightHalo;
-    
+
     [Header("Contenu de l'interaction")]
-    public Sprite imageToDisplay; 
-    [TextArea] public string textToDisplay; 
+    public Sprite imageToDisplay;
+    [TextArea] public string textToDisplay;
 
     private bool _hasBeenInteracted = false;
 
@@ -15,6 +15,8 @@ public class InteractableObject : MonoBehaviour, IInteractable
     {
         if (highlightHalo != null) highlightHalo.SetActive(show);
     }
+
+    public bool CanInteract() => true;
 
     public void Interact()
     {
@@ -33,5 +35,5 @@ public class InteractableObject : MonoBehaviour, IInteractable
         }
     }
 
-    
+
 }

@@ -2395,6 +2395,20 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 12159313527237656, guid: f05511a2f50abdb42be2c806661edc59, type: 3}
   m_PrefabInstance: {fileID: 5120568705800980040}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &933971340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 933971339}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
+  m_AspectMode: 3
+  m_AspectRatio: 1.7777778
 --- !u!4 &941121500 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9157924271501443928, guid: 755ee32b773522244b5669c29d5ebd96, type: 3}
@@ -3401,7 +3415,7 @@ MonoBehaviour:
   m_MinWidth: -1
   m_MinHeight: -1
   m_PreferredWidth: 100
-  m_PreferredHeight: 130
+  m_PreferredHeight: 100
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -4611,7 +4625,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 12159313527237656, guid: f05511a2f50abdb42be2c806661edc59, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4465844798773177437, guid: f05511a2f50abdb42be2c806661edc59, type: 3}
       propertyPath: m_fontSize
@@ -4709,33 +4723,17 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7894046829153081156, guid: f05511a2f50abdb42be2c806661edc59, type: 3}
-      propertyPath: m_Type
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7894046829153081156, guid: f05511a2f50abdb42be2c806661edc59, type: 3}
-      propertyPath: m_PreserveAspect
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7996258541650890155, guid: f05511a2f50abdb42be2c806661edc59, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7996258541650890155, guid: f05511a2f50abdb42be2c806661edc59, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7996258541650890155, guid: f05511a2f50abdb42be2c806661edc59, type: 3}
       propertyPath: m_LocalScale.x
-      value: 17.510738
+      value: 18.767605
       objectReference: {fileID: 0}
     - target: {fileID: 7996258541650890155, guid: f05511a2f50abdb42be2c806661edc59, type: 3}
       propertyPath: m_LocalScale.y
-      value: 9.839412
+      value: 12.138192
       objectReference: {fileID: 0}
     - target: {fileID: 7996258541650890155, guid: f05511a2f50abdb42be2c806661edc59, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 80
+      value: 95
       objectReference: {fileID: 0}
     - target: {fileID: 7996258541650890155, guid: f05511a2f50abdb42be2c806661edc59, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -4751,24 +4749,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8516132697757415414, guid: f05511a2f50abdb42be2c806661edc59, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: -2560
       objectReference: {fileID: 0}
     - target: {fileID: 8516132697757415414, guid: f05511a2f50abdb42be2c806661edc59, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: -1440
       objectReference: {fileID: 0}
     - target: {fileID: 8516132697757415414, guid: f05511a2f50abdb42be2c806661edc59, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -1280
       objectReference: {fileID: 0}
     - target: {fileID: 8516132697757415414, guid: f05511a2f50abdb42be2c806661edc59, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -720
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 12159313527237656, guid: f05511a2f50abdb42be2c806661edc59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 933971340}
     - targetCorrespondingSourceObject: {fileID: 1521757120758603085, guid: f05511a2f50abdb42be2c806661edc59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1403253220}

@@ -3,9 +3,14 @@ using StarterAssets;
 
 public class ChestLock : MonoBehaviour, IInteractable
 {
+    [SerializeField] private GameObject highlightHalo;
     public GameObject codePanel;
-    public string correctCode = "8261"; // code à trouver
+    public string correctCode = "8267"; // code à trouver
     public GameObject itemInside;
+
+    [Header("Contenu à afficher au déverrouillage")]
+    public Sprite treasureImage;
+    [TextArea] public string treasureText;
 
     private bool isOpened = false;
     private StarterAssetsInputs _input;
@@ -17,11 +22,6 @@ public class ChestLock : MonoBehaviour, IInteractable
     private void Start()
     {
         _input = FindFirstObjectByType<StarterAssetsInputs>();
-    }
-
-    private void Update()
-    {
-        
     }
 
     public void Interact()
@@ -61,9 +61,24 @@ public class ChestLock : MonoBehaviour, IInteractable
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        // Affiche l'objet du coffre via UISystem pour pouvoir le fermer avec E
+        UISystem ui = Object.FindAnyObjectByType<UISystem>();
+        if (ui != null && treasureImage != null)
+        {
+            ui.OpenDisplay(treasureImage, treasureText ?? "");
+        }
     }
 
     public void ShowAffordance(bool show)
     {
+        // Affiche le prompt seulement si le coffre n'est pas encore ouvert
+        if (highlightHalo != null)
+        {
+            highlightHalo.SetActive(show && !isOpened);
+        }
     }
+
+    public bool CanInteract() => !isOpened;
+
 }

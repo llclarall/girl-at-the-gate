@@ -1,6 +1,14 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Handles player interactions with objects in the environment.
+/// Detects interactable objects within a certain radius and allows the player to interact with them using various input methods (keyboard, controller, OSC).
+/// Displays interaction prompts and plays sounds on interaction.
+/// Designed to be flexible and extensible for different types of interactable objects.
+/// </summary>
+
+
 public class PlayerInteraction : MonoBehaviour
 {
     public float InteractionDistance = 3f;
@@ -104,9 +112,10 @@ public class PlayerInteraction : MonoBehaviour
                 _currentInteractable.ShowAffordance(true);
             }
 
+            // Affiche le prompt seulement si l'objet est actuellement interactif
             if (uiSystem != null)
             {
-                uiSystem.ToggleInteractionPrompt(true);
+                uiSystem.ToggleInteractionPrompt(_currentInteractable.CanInteract());
             }
         }
         else if (_currentInteractable != null)

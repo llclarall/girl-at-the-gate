@@ -5,6 +5,7 @@ public class ExitDoor : MonoBehaviour, IInteractable
 {
     public Material closedMaterial;
     public Material openedMaterial;
+    [SerializeField] private GameObject highlightHalo;
     private bool isUnlocked = false;
     private Renderer _renderer;
 
@@ -65,5 +66,12 @@ public class ExitDoor : MonoBehaviour, IInteractable
 
     public void ShowAffordance(bool show)
     {
+        // Affiche le prompt seulement si la porte est déverrouillée
+        if (highlightHalo != null)
+        {
+            highlightHalo.SetActive(show && isUnlocked);
+        }
     }
+
+    public bool CanInteract() => isUnlocked;
 }
