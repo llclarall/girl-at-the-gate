@@ -369,6 +369,11 @@ public class OscInputRuntimeBridge : MonoBehaviour
 
         float value = packet.HasValue ? packet.Value : 1f;
 
+        if (TryHandleChataigneRouterAddress(address, packet.HasValue, value))
+        {
+            return;
+        }
+
         if (verboseLogs)
         {
             Debug.Log($"[OSC] {address} {(packet.HasValue ? value.ToString("0.###") : "(bang)")}");
@@ -533,6 +538,105 @@ public class OscInputRuntimeBridge : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    private bool TryHandleChataigneRouterAddress(string address, bool hasValue, float value)
+    {
+        // Handles Chataigne router paths like /gamepad/axes/axis1 and /gamepad/buttons/button1.
+        if (address.StartsWith("/gamepad/axes/axis", StringComparison.Ordinal) ||
+            address.StartsWith("/joycon/axes/axis", StringComparison.Ordinal) ||
+            address.StartsWith("/joystick/axes/axis", StringComparison.Ordinal))
+        {
+            if (_starterInputs == null)
+            {
+                return true;
+            }
+
+            float axis = hasValue ? NormalizeAxis(value) : 0f;
+
+            if (address.EndsWith("/axis1", StringComparison.Ordinal))
+            {
+                _starterInputs.OnOscMoveHorizontal(axis);
+                _lastHorizontalAxisValue = axis;
+                MarkHorizontalAxisUpdate();
+                return true;
+            }
+
+            if (address.EndsWith("/axis2", StringComparison.Ordinal))
+            {
+                axis = invertVerticalAxis ? -axis : axis;
+                _starterInputs.OnOscMoveVertical(axis);
+                _lastVerticalAxisValue = axis;
+                MarkVerticalAxisUpdate();
+                return true;
+            }
+
+            return false;
+        }
+
+        if (address.StartsWith("/gamepad/buttons/button", StringComparison.Ordinal) ||
+            address.StartsWith("/joycon/buttons/button", StringComparison.Ordinal) ||
+            address.StartsWith("/joystick/buttons/button", StringComparison.Ordinal))
+        {
+            if (!TryParseTrailingButtonIndex(address, out int buttonIndex))
+            {
+                return false;
+            }
+
+            switch (buttonIndex)
+            {
+                case 1:
+                    if (_starterInputs != null)
+                    {
+                        if (hasValue)
+                        {
+                            _starterInputs.OnOscSauter(value);
+                        }
+                        else
+                        {
+                            _starterInputs.OnOscSauterBang();
+                        }
+                    }
+
+                    return true;
+
+                case 2:
+                    if (_playerInteraction != null)
+                    {
+                        if (hasValue)
+                        {
+                            _playerInteraction.OnOscInteragir(value);
+                        }
+                        else
+                        {
+                            _playerInteraction.OnOscInteragirBang();
+                        }
+                    }
+
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool TryParseTrailingButtonIndex(string address, out int buttonIndex)
+    {
+        buttonIndex = 0;
+
+        int markerIndex = address.LastIndexOf("button", StringComparison.Ordinal);
+        if (markerIndex < 0)
+        {
+            return false;
+        }
+
+        int numberStart = markerIndex + "button".Length;
+        if (numberStart >= address.Length)
+        {
+            return false;
+        }
+
+        return int.TryParse(address.Substring(numberStart), out buttonIndex);
     }
 
     private void ApplyAxisIdleStop()
