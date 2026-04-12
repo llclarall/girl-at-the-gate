@@ -22,7 +22,10 @@ public class UISystem : MonoBehaviour
     public void OpenDisplay(Sprite photo, string message)
     {
         _isObjectOpen = true;
-        objectPanel.SetActive(true);
+        if (objectPanel != null)
+        {
+            objectPanel.SetActive(true);
+        }
         ToggleInteractionPrompt(false);
 
         if (displayImage != null)
@@ -39,8 +42,14 @@ public class UISystem : MonoBehaviour
     public void CloseDisplay()
     {
         _isObjectOpen = false;
-        objectPanel.SetActive(false);
+        if (objectPanel != null)
+        {
+            objectPanel.SetActive(false);
+        }
     }
 
-    public bool IsObjectOpen() => _isObjectOpen;
+    public bool IsObjectOpen()
+    {
+        return _isObjectOpen || (objectPanel != null && objectPanel.activeSelf);
+    }
 }

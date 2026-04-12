@@ -34,6 +34,11 @@ public class PlayerInteraction : MonoBehaviour
 
     private void Awake()
     {
+        if (uiSystem == null)
+        {
+            uiSystem = Object.FindAnyObjectByType<UISystem>();
+        }
+
         if (interactionAudioSource == null)
         {
             interactionAudioSource = GetComponent<AudioSource>();
