@@ -1,6 +1,8 @@
 using UnityEngine;
 using TMPro;
-using System;
+using System; 
+using UnityEngine.SceneManagement; 
+using System.Collections;
 
 [Serializable]
 public class DialogueLine
@@ -17,9 +19,14 @@ public class NPCInteraction : MonoBehaviour, IInteractable
     public TextMeshProUGUI dialogueText;
     public TextMeshProUGUI nameText;
 
+    [Header("Fin du Jeu")]
+    public CanvasGroup fadeAnimator;  
+    public string menuSceneName = "MainMenu";
+    public UnityEngine.UI.Image endingImageDisplay;
+    public Sprite[] endingSprites;
+
     [Header("Dialogue Content")]
     public DialogueLine[] conversation;
-
     private int _index = 0;
 
     public void Interact()
@@ -38,8 +45,6 @@ public class NPCInteraction : MonoBehaviour, IInteractable
     {
         _index = 0;
         dialoguePanel.SetActive(true);
-
-
         DisplayCurrentLine();
 
         Cursor.lockState = CursorLockMode.None;
@@ -69,11 +74,51 @@ public class NPCInteraction : MonoBehaviour, IInteractable
     void EndDialogue()
     {
         dialoguePanel.SetActive(false);
-
+        StartCoroutine(FinishGameRoutine());
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
+
+    // Coroutine to handle the fade-out and display of ending images before returning to the main menu
+    IEnumerator FinishGameRoutine()
+    {
+        float timer = 0;
+        while (timer < 1.5f)
+        {
+            timer += Time.deltaTime;
+            fadeAnimator.alpha = timer / 1.5f;
+            yield return null;
+        }
+        fadeAnimator.alpha = 1;
+
+        foreach (Sprite s in endingSprites)
+        {
+            endingImageDisplay.sprite = s;
+
+            timer = 0;
+            while (timer < 1f)
+            {
+                timer += Time.deltaTime;
+                endingImageDisplay.color = new Color(1, 1, 1, timer / 1f);
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(4f);
+
+            timer = 0;
+            while (timer < 1f)
+            {
+                timer += Time.deltaTime;
+                endingImageDisplay.color = new Color(1, 1, 1, 1 - (timer / 1f));
+                yield return null;
+            }
+        }
+
+        //yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene(menuSceneName);
+    }
+
 
     public void ShowAffordance(bool show) { }
 

@@ -9,8 +9,30 @@ public class UISystem : MonoBehaviour
 
     [SerializeField] private Image displayImage;
     [SerializeField] private TextMeshProUGUI displayText;
+    [SerializeField] private bool useNativeImageSize = false;
 
     private bool _isObjectOpen = false;
+
+    private void Awake()
+    {
+        ResolveDisplayReferences();
+    }
+
+    private void ResolveDisplayReferences()
+    {
+        if (objectPanel != null)
+        {
+            if (displayImage == null)
+            {
+                displayImage = objectPanel.GetComponentInChildren<Image>(true);
+            }
+
+            if (displayText == null)
+            {
+                displayText = objectPanel.GetComponentInChildren<TextMeshProUGUI>(true);
+            }
+        }
+    }
 
     public void ToggleInteractionPrompt(bool isActive)
     {
@@ -21,6 +43,7 @@ public class UISystem : MonoBehaviour
     // interaction system 
     public void OpenDisplay(Sprite photo, string message)
     {
+        ResolveDisplayReferences();
         _isObjectOpen = true;
         if (objectPanel != null)
         {
@@ -31,9 +54,16 @@ public class UISystem : MonoBehaviour
         if (displayImage != null)
         {
             displayImage.sprite = photo;
+            displayImage.enabled = photo != null;
+            displayImage.color = new Color(1f, 1f, 1f, 1f);
+
             if (photo != null)
             {
-                displayImage.SetNativeSize();
+                if (useNativeImageSize)
+                {
+                    displayImage.SetNativeSize();
+                }
+                displayImage.gameObject.SetActive(true);
             }
         }
         if (displayText != null) displayText.text = message;
