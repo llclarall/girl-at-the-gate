@@ -20,12 +20,14 @@ public class GameManager : MonoBehaviour
     [Header("Feedback de déverrouillage")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip screamClip;
+    [SerializeField, Range(0f, 1f)] private float screamVolume = 0.55f;
     [SerializeField] private Image unlockMessageImage;
     [SerializeField] private Sprite unlockMessageSprite;
-    [SerializeField] private float unlockMessageDuration = 4f;
+    [SerializeField] private float unlockMessageDuration = 20f;
 
     private int _objectsFound = 0;
     private bool _exitUnlocked = false;
+    private bool _unlockFeedbackPending = false;
     private Coroutine _unlockMessageRoutine;
 
     void Awake()
@@ -77,6 +79,29 @@ public class GameManager : MonoBehaviour
 
         }
 
+        _unlockFeedbackPending = true;
+        TryPlayUnlockFeedback();
+    }
+
+    public void NotifyInteractionClosed()
+    {
+        TryPlayUnlockFeedback();
+    }
+
+    private void TryPlayUnlockFeedback()
+    {
+        if (!_unlockFeedbackPending)
+        {
+            return;
+        }
+
+        UISystem uiSystem = Object.FindAnyObjectByType<UISystem>();
+        if (uiSystem != null && uiSystem.IsObjectOpen())
+        {
+            return;
+        }
+
+        _unlockFeedbackPending = false;
         PlayScreamSound();
         ShowUnlockSprite();
     }
@@ -90,11 +115,11 @@ public class GameManager : MonoBehaviour
 
         if (audioSource != null)
         {
-            audioSource.PlayOneShot(screamClip);
+            audioSource.PlayOneShot(screamClip, screamVolume);
             return;
         }
 
-        AudioSource.PlayClipAtPoint(screamClip, transform.position);
+        AudioSource.PlayClipAtPoint(screamClip, transform.position, screamVolume);
     }
 
     private void ShowUnlockSprite()

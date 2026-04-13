@@ -20,18 +20,21 @@ public class InteractableObject : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        // checks if the object has already been interacted with, if not it will trigger the event in the GameManager
-        if (!_hasBeenInteracted)
-        {
-            _hasBeenInteracted = true;
-            GameManager.Instance.ObjectInteracted();
-        }
-
         // opens the display panel with the specified image and text
         UISystem ui = Object.FindAnyObjectByType<UISystem>();
         if (ui != null)
         {
             ui.OpenDisplay(imageToDisplay, textToDisplay);
+        }
+
+        // checks if the object has already been interacted with, if not it will trigger the event in the GameManager
+        if (!_hasBeenInteracted)
+        {
+            _hasBeenInteracted = true;
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.ObjectInteracted();
+            }
         }
     }
 
