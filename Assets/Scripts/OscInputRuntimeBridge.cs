@@ -7,6 +7,10 @@ using System.Threading;
 using StarterAssets;
 using UnityEngine;
 
+/// <summary>
+/// This script serves as a bridge between OSC (Open Sound Control) messages received over UDP and the game's input system. It listens for OSC messages on a specified port, parses them, and translates them into corresponding input actions for the player character. The script supports both button-like messages (e.g., jump, interact) and axis-like messages (e.g., movement), with configurable options for axis behavior such as dead zones and inversion. It also includes handling for Chataigne router paths, allowing for flexible integration with various OSC setups. The use of a concurrent queue ensures thread-safe communication between the listener thread and the main Unity thread where input actions are applied.
+/// </summary>
+
 public class OscInputRuntimeBridge : MonoBehaviour
 {
     private static OscInputRuntimeBridge _instance;

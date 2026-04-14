@@ -3,6 +3,10 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 
+/// <summary>
+/// This script manages the UI system for the game, including the interaction prompt and the object display panel. It handles the opening and closing of the display panel, configuring the displayed image and text, and ensuring that the interaction prompt is shown or hidden appropriately based on the player's interactions. The script also includes functionality for trimming transparent borders from displayed images to improve their appearance in the UI. It uses a singleton pattern to allow easy access from other scripts when they need to update the UI based on player interactions.  
+/// </summary>
+
 public class UISystem : MonoBehaviour
 {
     public static UISystem Instance;
@@ -164,6 +168,7 @@ public class UISystem : MonoBehaviour
         return _trimmedSpriteCache[source];
     }
 
+    // Attempts to create a new sprite with transparent borders trimmed based on the alpha visibility threshold. If the source texture is not readable or an error occurs during processing, the original sprite is returned.
     private Sprite TryCreateTrimmedSprite(Sprite source)
     {
         Texture2D texture = source.texture;
@@ -242,6 +247,7 @@ public class UISystem : MonoBehaviour
         }
     }
 
+    // Determines the maximum size for the displayed image based on configuration and panel size
     private Vector2 ResolveTargetImageBounds()
     {
         if (sizeImageFromPanel && objectPanel != null)
@@ -260,6 +266,7 @@ public class UISystem : MonoBehaviour
         return maxDisplayImageSize;
     }
 
+    // Scales the image to fit within the specified bounds while preserving aspect ratio
     private static void FitImageInBounds(Image image, Sprite sprite, Vector2 bounds)
     {
         if (image == null || sprite == null)

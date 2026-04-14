@@ -1,16 +1,21 @@
 using UnityEngine;
 using StarterAssets;
 
+/// <summary>
+/// This script manages the locked chest in the underground scene. It allows the player to interact with the chest, enter a code to unlock it, and then reveals the contents of the chest if the correct code is entered. It also handles showing a highlight when the player can interact with the chest and plays a sound effect upon interaction.
+/// </summary>
+
 public class ChestLock : MonoBehaviour, IInteractable
 {
     [SerializeField] private GameObject highlightHalo;
     public GameObject codePanel;
-    public string correctCode = "8267"; // code à trouver
+    public string correctCode = "8267"; 
     public GameObject itemInside;
 
     [Header("Contenu à afficher au déverrouillage")]
     public Sprite treasureImage;
     [TextArea] public string treasureText;
+    public GameObject obstacleToDisable;
 
     private bool isOpened = false;
     private StarterAssetsInputs _input;
@@ -62,17 +67,20 @@ public class ChestLock : MonoBehaviour, IInteractable
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        // Affiche l'objet du coffre via UISystem pour pouvoir le fermer avec E
         UISystem ui = Object.FindAnyObjectByType<UISystem>();
         if (ui != null && treasureImage != null)
         {
             ui.OpenDisplay(treasureImage, treasureText ?? "");
         }
+
+        if (obstacleToDisable != null)
+        {
+            obstacleToDisable.SetActive(false);
+        }
     }
 
     public void ShowAffordance(bool show)
     {
-        // Affiche le prompt seulement si le coffre n'est pas encore ouvert
         if (highlightHalo != null)
         {
             highlightHalo.SetActive(show && !isOpened);

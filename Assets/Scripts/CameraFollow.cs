@@ -1,7 +1,11 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/// This script makes the camera follow the player. 
+/// This script makes the camera follow the player. It also limits the camera's horizontal movement in specific scenes (like the cabin) to prevent showing areas outside of the intended view. 
+
+/// <remarks>
+/// i know i could have made this more generic by using empty game objects as camera bounds, but i started developping this game before learning about that technique, and it was easier to just hardcode the limits for the cabin scene. I might refactor this later to make it more flexible, but for now it works fine for our needs.
+/// </remarks>
 
 public class CameraFollow : MonoBehaviour
 {

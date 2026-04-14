@@ -1,6 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// This script is responsible for controlling the audio playback based on the movement of a specified target.
+/// </summary>
+
 [RequireComponent(typeof(AudioSource))]
 public class MotionAudioController : MonoBehaviour
 {
@@ -20,10 +24,8 @@ public class MotionAudioController : MonoBehaviour
 
     void Start()
     {
-        // Get the AudioSource attached to this GameObject
         audioSource = GetComponent<AudioSource>();
 
-        // Find the Animator in sibling or child objects
         animator = GetComponentInParent<Animator>();
 
         if (animator != null)
@@ -35,7 +37,6 @@ public class MotionAudioController : MonoBehaviour
             Debug.LogError("No Animator component found in parent or its children.");
         }
 
-        // Initialize last position
         if (targetTransform != null)
         {
             lastPosition = targetTransform.position;
@@ -49,23 +50,19 @@ public class MotionAudioController : MonoBehaviour
             return;
         }
 
-        // Check if the object has moved significantly
         float movement = Vector3.Distance(targetTransform.position, lastPosition);
         bool isMoving = movement > movementThreshold;
 
         if (isMoving && !wasMoving)
         {
-            // If there's a fade-out in progress, stop it
             if (fadeCoroutine != null)
             {
                 StopCoroutine(fadeCoroutine);
                 fadeCoroutine = null;
             }
             
-            // Reset volume to full
             audioSource.volume = 1f;
             
-            // Start playing audio only when movement starts
             if (!audioSource.isPlaying)
             {
                 audioSource.Play();
@@ -73,10 +70,8 @@ public class MotionAudioController : MonoBehaviour
         }
         else if (!isMoving && wasMoving)
         {
-            // Start fade-out when movement stops
             if (audioSource.isPlaying)
             {
-                // If there's already a fade-out in progress, stop it
                 if (fadeCoroutine != null)
                 {
                     StopCoroutine(fadeCoroutine);
@@ -85,10 +80,8 @@ public class MotionAudioController : MonoBehaviour
             }
         }
 
-        // Update movement state
         wasMoving = isMoving;
 
-        // Update last position for the next frame
         lastPosition = targetTransform.position;
     }
 
@@ -104,7 +97,6 @@ public class MotionAudioController : MonoBehaviour
             yield return null;
         }
 
-        // Ensure volume is zero and stop the audio
         audioSource.volume = 0;
         audioSource.Stop();
         fadeCoroutine = null;

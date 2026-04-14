@@ -2,6 +2,10 @@ using UnityEngine;
 using Unity.Cinemachine;
 using StarterAssets;
 
+/// <summary>
+/// This script is responsible for managing the player's respawn mechanics. It monitors the player's position and respawns them at a designated checkpoint if they fall below a certain threshold. 
+/// </summary>
+
 public class AutoRespawn : MonoBehaviour
 {
     [SerializeField] private float m_KillThreshold = -10f;

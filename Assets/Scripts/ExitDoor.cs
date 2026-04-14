@@ -1,6 +1,10 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// This script is attached to the cemetery exit door. The door starts in a locked state, and the player must find all the necessary items to unlock it. The door can be unlocked by calling the Unlock() method, which changes the material of the door to indicate that it is now open.  
+/// </summary>
+
 public class ExitDoor : MonoBehaviour, IInteractable
 {
     public Material closedMaterial;
@@ -66,7 +70,6 @@ public class ExitDoor : MonoBehaviour, IInteractable
 
     public void ShowAffordance(bool show)
     {
-        // Affiche le prompt seulement si la porte est déverrouillée
         if (highlightHalo != null)
         {
             highlightHalo.SetActive(show && isUnlocked);

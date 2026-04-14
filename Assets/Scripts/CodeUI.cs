@@ -4,6 +4,11 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// This script manages the code input UI for unlocking the chest. It handles user interactions with the code panel, validates the entered code against the correct code defined in the ChestLock script, and provides feedback to the player. It also ensures that the input field is properly set up and focused when the panel is opened, and it manages the state of the UI elements to allow for smooth interaction.
+/// </summary>
+
+
 public class CodeUI : MonoBehaviour
 {
     public TMP_InputField codeInputField;
@@ -82,6 +87,7 @@ public class CodeUI : MonoBehaviour
         }
     }
 
+    // This method ensures that the input field has all necessary components assigned, such as the text viewport, placeholder, and text component. It also sets up the raycast targets to ensure proper interaction with the UI.
     private void EnsureInputFieldSetup()
     {
         if (codeInputField == null)
@@ -147,6 +153,7 @@ public class CodeUI : MonoBehaviour
             rootGraphic.raycastTarget = true;
         }
 
+
         Graphic[] childGraphics = codeInputField.GetComponentsInChildren<Graphic>(true);
         for (int i = 0; i < childGraphics.Length; i++)
         {
@@ -170,6 +177,7 @@ public class CodeUI : MonoBehaviour
         }
     }
 
+    // coroutine to ensure the input field is focused after the UI has been enabled, to avoid issues with EventSystem not registering the selection immediately
     private IEnumerator FocusInputNextFrame()
     {
         yield return null;

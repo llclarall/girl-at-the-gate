@@ -2,10 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 /// <summary>
-/// Handles player interactions with objects in the environment.
-/// Detects interactable objects within a certain radius and allows the player to interact with them using various input methods (keyboard, controller, OSC).
-/// Displays interaction prompts and plays sounds on interaction.
-/// Designed to be flexible and extensible for different types of interactable objects.
+/// This script manages the player's interactions with objects in the game world. It detects nearby interactable objects, displays interaction prompts, and handles the interaction logic when the player chooses to interact. The script uses a sphere overlap to find interactable objects within a certain distance and checks for player input to trigger interactions. It also includes support for both keyboard and controller inputs, as well as OSC messages for flexible control options.
 /// </summary>
 
 
@@ -74,6 +71,7 @@ public class PlayerInteraction : MonoBehaviour
 
         if (hitColliders.Length > 0)
         {
+            // Debug rays to visualize the detection area and the colliders being checked
             Debug.DrawRay(EffectiveInteractionSource.position, EffectiveInteractionSource.forward * InteractionDistance, Color.red);
             Debug.DrawLine(EffectiveInteractionSource.position, EffectiveInteractionSource.position + Vector3.right * InteractionDistance, Color.red);
 
@@ -187,7 +185,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void TryInteract()
     {
-        // Prevent double trigger when multiple input paths fire in the same frame.
+        // Prevents double trigger when multiple input paths fire in the same frame.
         if (_lastInteractionFrame == Time.frameCount)
         {
             return;
@@ -241,6 +239,7 @@ public class PlayerInteraction : MonoBehaviour
         return Input.GetKeyDown(KeyCode.JoystickButton0) || Input.GetKeyDown(KeyCode.JoystickButton2);
     }
 
+    // Visualize the interaction detection radius in the editor when the object is selected
     private void OnDrawGizmosSelected()
     {
         if (EffectiveInteractionSource != null)

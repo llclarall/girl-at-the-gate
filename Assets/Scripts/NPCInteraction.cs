@@ -4,6 +4,11 @@ using System;
 using UnityEngine.SceneManagement; 
 using System.Collections;
 
+
+/// <summary>
+/// This script manages the interaction with an NPC character in the game. It handles the display of dialogue lines when the player interacts with the NPC, and it also manages the end-of-game sequence by fading out the screen and displaying a series of ending images before returning to the main menu. The dialogue content is defined in an array of DialogueLine objects, allowing for easy customization of the conversation.
+/// </summary>
+
 [Serializable]
 public class DialogueLine
 {

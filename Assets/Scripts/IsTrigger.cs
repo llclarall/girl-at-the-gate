@@ -2,6 +2,10 @@ using UnityEngine;
 using Unity.Cinemachine;
 using StarterAssets;
 
+/// <summary>
+/// This script is attached to the camera trigger zones in the game. When the player enters a trigger zone, it automatically switches the camera to a predefined perspective (e.g., from 2D to 3D) and adjusts the player's movement restrictions accordingly. It also sets a checkpoint for respawning if the player dies within that zone. When the player exits the trigger zone, it reverts the camera and movement settings back to their original state.
+/// </summary>
+
 public class ZoneCameraAuto : MonoBehaviour
 {
     public CinemachineCamera platformCamera;
