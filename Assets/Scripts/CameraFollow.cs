@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class CameraFollow : MonoBehaviour
 {
-    public Transform player;
+    [SerializeField] private Transform player;
     [SerializeField] private string[] boundedSceneNames = { "CabinScene", "CabinScene 1" };
     private Vector3 offset;
     private float maxCameraX = 5.7f + 5f; // limit to the right of the cabin so the camera doesn't show outside of the cabin

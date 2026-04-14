@@ -7,8 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class ExitDoor : MonoBehaviour, IInteractable
 {
-    public Material closedMaterial;
-    public Material openedMaterial;
+    [SerializeField] private Material closedMaterial;
+    [SerializeField] private Material openedMaterial;
     [SerializeField] private GameObject highlightHalo;
     private bool isUnlocked = false;
     private Renderer _renderer;
@@ -38,7 +38,9 @@ public class ExitDoor : MonoBehaviour, IInteractable
             _renderer.material = openedMaterial;
         }
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
         Debug.Log("La porte est maintenant déverrouillée !");
+#endif
     }
 
     public void Interact()
@@ -64,7 +66,9 @@ public class ExitDoor : MonoBehaviour, IInteractable
         }
         else
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             Debug.Log("La porte est verrouillée, trouve tous les objets !");
+#endif
         }
     }
 

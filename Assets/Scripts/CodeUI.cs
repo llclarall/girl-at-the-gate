@@ -3,6 +3,7 @@ using TMPro;
 using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using StarterAssets;
 
 /// <summary>
 /// This script manages the code input UI for unlocking the chest. It handles user interactions with the code panel, validates the entered code against the correct code defined in the ChestLock script, and provides feedback to the player. It also ensures that the input field is properly set up and focused when the panel is opened, and it manages the state of the UI elements to allow for smooth interaction.
@@ -11,16 +12,27 @@ using UnityEngine.UI;
 
 public class CodeUI : MonoBehaviour
 {
-    public TMP_InputField codeInputField;
-    public TextMeshProUGUI statusText;
-    public ChestLock currentChest;
+    [SerializeField] private TMP_InputField codeInputField;
+    [SerializeField] private TextMeshProUGUI statusText;
+    [SerializeField] private ChestLock currentChest;
     private const int MAX_CODE_LENGTH = 4;
     private CanvasGroup[] _canvasGroups;
+    private ThirdPersonController _thirdPersonController;
+    private StarterAssetsInputs _starterAssetsInputs;
+    private bool _storedThirdPersonControllerEnabled;
+    private bool _hasStoredThirdPersonControllerState;
 
     private void Awake()
     {
         _canvasGroups = GetComponentsInParent<CanvasGroup>(true);
+        _thirdPersonController = FindFirstObjectByType<ThirdPersonController>();
+        _starterAssetsInputs = FindFirstObjectByType<StarterAssetsInputs>();
         EnsureInputFieldSetup();
+    }
+
+    private void OnDisable()
+    {
+        SetMovementLocked(false);
     }
 
     private void OnEnable()
@@ -41,6 +53,8 @@ public class CodeUI : MonoBehaviour
                 group.blocksRaycasts = true;
             }
         }
+
+        SetMovementLocked(true);
 
         if (codeInputField != null)
         {
@@ -242,6 +256,8 @@ public class CodeUI : MonoBehaviour
 
     public void ClosePanel()
     {
+        SetMovementLocked(false);
+
         if (codeInputField != null)
         {
             codeInputField.text = "";
@@ -250,5 +266,36 @@ public class CodeUI : MonoBehaviour
         gameObject.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+
+    private void SetMovementLocked(bool isLocked)
+    {
+        if (_starterAssetsInputs != null && isLocked)
+        {
+            _starterAssetsInputs.OnOscMoveStop();
+        }
+
+        if (_thirdPersonController == null)
+        {
+            return;
+        }
+
+        if (isLocked)
+        {
+            if (!_hasStoredThirdPersonControllerState)
+            {
+                _storedThirdPersonControllerEnabled = _thirdPersonController.enabled;
+                _hasStoredThirdPersonControllerState = true;
+            }
+
+            _thirdPersonController.enabled = false;
+            return;
+        }
+
+        if (_hasStoredThirdPersonControllerState)
+        {
+            _thirdPersonController.enabled = _storedThirdPersonControllerEnabled;
+            _hasStoredThirdPersonControllerState = false;
+        }
     }
 }

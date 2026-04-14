@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using StarterAssets;
 
 /// <summary>
 /// This script manages the player's interactions with objects in the game world. It detects nearby interactable objects, displays interaction prompts, and handles the interaction logic when the player chooses to interact. The script uses a sphere overlap to find interactable objects within a certain distance and checks for player input to trigger interactions. It also includes support for both keyboard and controller inputs, as well as OSC messages for flexible control options.
@@ -26,6 +27,10 @@ public class PlayerInteraction : MonoBehaviour
     private IInteractable _currentInteractable;
     private bool _wasOscPressed;
     private int _lastInteractionFrame = -1;
+    private ThirdPersonController _thirdPersonController;
+    private StarterAssetsInputs _starterAssetsInputs;
+    private bool _storedThirdPersonControllerEnabled;
+    private bool _hasStoredThirdPersonControllerState;
 
     private Transform EffectiveInteractionSource => InteractionSource != null ? InteractionSource : transform;
 
@@ -36,14 +41,39 @@ public class PlayerInteraction : MonoBehaviour
             uiSystem = Object.FindAnyObjectByType<UISystem>();
         }
 
+        _thirdPersonController = GetComponentInParent<ThirdPersonController>();
+        _starterAssetsInputs = GetComponentInParent<StarterAssetsInputs>();
+
         if (interactionAudioSource == null)
         {
             interactionAudioSource = GetComponent<AudioSource>();
         }
+
+        SyncMovementLockFromUI();
+    }
+
+    private void OnEnable()
+    {
+        if (uiSystem != null)
+        {
+            uiSystem.DisplayStateChanged += HandleDisplayStateChanged;
+            SyncMovementLockFromUI();
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (uiSystem != null)
+        {
+            uiSystem.DisplayStateChanged -= HandleDisplayStateChanged;
+        }
+
+        SetMovementLocked(false);
     }
 
     void Update()
     {
+        SyncMovementLockFromUI();
         CheckForInteractable();
 
         if (enableKeyboardFallback && Input.GetKeyDown(keyboardInteractKey))
@@ -72,8 +102,10 @@ public class PlayerInteraction : MonoBehaviour
         if (hitColliders.Length > 0)
         {
             // Debug rays to visualize the detection area and the colliders being checked
+#if UNITY_EDITOR
             Debug.DrawRay(EffectiveInteractionSource.position, EffectiveInteractionSource.forward * InteractionDistance, Color.red);
             Debug.DrawLine(EffectiveInteractionSource.position, EffectiveInteractionSource.position + Vector3.right * InteractionDistance, Color.red);
+#endif
 
             for (int i = 0; i < hitColliders.Length; i++)
             {
@@ -246,6 +278,50 @@ public class PlayerInteraction : MonoBehaviour
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(EffectiveInteractionSource.position, InteractionDistance);
+        }
+    }
+
+    private void HandleDisplayStateChanged(bool isOpen)
+    {
+        SetMovementLocked(isOpen);
+    }
+
+    private void SyncMovementLockFromUI()
+    {
+        if (uiSystem != null)
+        {
+            SetMovementLocked(uiSystem.IsObjectOpen());
+        }
+    }
+
+    private void SetMovementLocked(bool isLocked)
+    {
+        if (_starterAssetsInputs != null && isLocked)
+        {
+            _starterAssetsInputs.OnOscMoveStop();
+        }
+
+        if (_thirdPersonController == null)
+        {
+            return;
+        }
+
+        if (isLocked)
+        {
+            if (!_hasStoredThirdPersonControllerState)
+            {
+                _storedThirdPersonControllerEnabled = _thirdPersonController.enabled;
+                _hasStoredThirdPersonControllerState = true;
+            }
+
+            _thirdPersonController.enabled = false;
+            return;
+        }
+
+        if (_hasStoredThirdPersonControllerState)
+        {
+            _thirdPersonController.enabled = _storedThirdPersonControllerEnabled;
+            _hasStoredThirdPersonControllerState = false;
         }
     }
 

@@ -8,20 +8,24 @@ using StarterAssets;
 
 public class ZoneCameraAuto : MonoBehaviour
 {
-    public CinemachineCamera platformCamera;
+    [SerializeField] private CinemachineCamera platformCamera;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             platformCamera.Priority = 20;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             Debug.Log("Mode 3D : Activé");
+#endif
 
             ThirdPersonController controller = other.GetComponentInParent<ThirdPersonController>();
             if (controller != null)
             {
                 controller.RestrictToXAxis = false;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
                 Debug.Log("Mouvements débloqués sur tous les axes");
+#endif
             }
 
             AutoRespawn respawnController = other.GetComponentInParent<AutoRespawn>();
@@ -37,14 +41,18 @@ public class ZoneCameraAuto : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             platformCamera.Priority = 5;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             Debug.Log("Mode 2D : Retour à la normale");
+#endif
 
             ThirdPersonController controller = other.GetComponentInParent<ThirdPersonController>();
             if (controller != null)
             {
                 controller.RestrictToXAxis = true;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
                 Debug.Log("Mouvements verrouillés sur X uniquement");
+#endif
             }
         }
     }
-} 
+}

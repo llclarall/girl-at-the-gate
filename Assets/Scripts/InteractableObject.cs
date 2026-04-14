@@ -10,8 +10,8 @@ public class InteractableObject : MonoBehaviour, IInteractable
     [SerializeField] private GameObject highlightHalo;
 
     [Header("Contenu de l'interaction")]
-    public Sprite imageToDisplay;
-    [TextArea] public string textToDisplay;
+    [SerializeField] private Sprite imageToDisplay;
+    [SerializeField, TextArea] private string textToDisplay;
 
     private bool _hasBeenInteracted = false;
 

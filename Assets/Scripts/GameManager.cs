@@ -51,7 +51,9 @@ public class GameManager : MonoBehaviour
         }
 
         _objectsFound++;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
         Debug.Log("Objets trouvés : " + _objectsFound + "/" + totalObjectsToFind);
+#endif
 
         if (_objectsFound >= totalObjectsToFind)
         {
@@ -67,7 +69,9 @@ public class GameManager : MonoBehaviour
         }
 
         _exitUnlocked = true;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
         Debug.Log("Tous les objets vus ! La porte est ouverte.");
+#endif
         if (exitDoor != null)
         {
             ExitDoor doorScript = exitDoor.GetComponent<ExitDoor>();

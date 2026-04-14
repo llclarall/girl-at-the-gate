@@ -1,8 +1,9 @@
 using UnityEngine;
 using TMPro;
-using System; 
-using UnityEngine.SceneManagement; 
+using System;
+using UnityEngine.SceneManagement;
 using System.Collections;
+using StarterAssets;
 
 
 /// <summary>
@@ -25,7 +26,7 @@ public class NPCInteraction : MonoBehaviour, IInteractable
     public TextMeshProUGUI nameText;
 
     [Header("Fin du Jeu")]
-    public CanvasGroup fadeAnimator;  
+    public CanvasGroup fadeAnimator;
     public string menuSceneName = "MainMenu";
     public UnityEngine.UI.Image endingImageDisplay;
     public Sprite[] endingSprites;
@@ -33,6 +34,16 @@ public class NPCInteraction : MonoBehaviour, IInteractable
     [Header("Dialogue Content")]
     public DialogueLine[] conversation;
     private int _index = 0;
+    private ThirdPersonController _thirdPersonController;
+    private StarterAssetsInputs _starterAssetsInputs;
+    private bool _storedThirdPersonControllerEnabled;
+    private bool _hasStoredThirdPersonControllerState;
+
+    private void Awake()
+    {
+        _thirdPersonController = FindFirstObjectByType<ThirdPersonController>();
+        _starterAssetsInputs = FindFirstObjectByType<StarterAssetsInputs>();
+    }
 
     public void Interact()
     {
@@ -50,6 +61,7 @@ public class NPCInteraction : MonoBehaviour, IInteractable
     {
         _index = 0;
         dialoguePanel.SetActive(true);
+        SetMovementLocked(true);
         DisplayCurrentLine();
 
         Cursor.lockState = CursorLockMode.None;
@@ -79,6 +91,7 @@ public class NPCInteraction : MonoBehaviour, IInteractable
     void EndDialogue()
     {
         dialoguePanel.SetActive(false);
+        SetMovementLocked(false);
         StartCoroutine(FinishGameRoutine());
 
         Cursor.lockState = CursorLockMode.Locked;
@@ -109,7 +122,7 @@ public class NPCInteraction : MonoBehaviour, IInteractable
                 yield return null;
             }
 
-            yield return new WaitForSeconds(4f);
+            yield return new WaitForSeconds(3f);
 
             timer = 0;
             while (timer < 1f)
@@ -128,5 +141,36 @@ public class NPCInteraction : MonoBehaviour, IInteractable
     public void ShowAffordance(bool show) { }
 
     public bool CanInteract() => true;
+
+    private void SetMovementLocked(bool isLocked)
+    {
+        if (_starterAssetsInputs != null && isLocked)
+        {
+            _starterAssetsInputs.OnOscMoveStop();
+        }
+
+        if (_thirdPersonController == null)
+        {
+            return;
+        }
+
+        if (isLocked)
+        {
+            if (!_hasStoredThirdPersonControllerState)
+            {
+                _storedThirdPersonControllerEnabled = _thirdPersonController.enabled;
+                _hasStoredThirdPersonControllerState = true;
+            }
+
+            _thirdPersonController.enabled = false;
+            return;
+        }
+
+        if (_hasStoredThirdPersonControllerState)
+        {
+            _thirdPersonController.enabled = _storedThirdPersonControllerEnabled;
+            _hasStoredThirdPersonControllerState = false;
+        }
+    }
 
 }

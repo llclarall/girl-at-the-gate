@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System;
 
 /// <summary>
 /// This script manages the UI system for the game, including the interaction prompt and the object display panel. It handles the opening and closing of the display panel, configuring the displayed image and text, and ensuring that the interaction prompt is shown or hidden appropriately based on the player's interactions. The script also includes functionality for trimming transparent borders from displayed images to improve their appearance in the UI. It uses a singleton pattern to allow easy access from other scripts when they need to update the UI based on player interactions.  
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 public class UISystem : MonoBehaviour
 {
     public static UISystem Instance;
+    public event Action<bool> DisplayStateChanged;
 
     [SerializeField] private GameObject interactionPrompt;
     [SerializeField] private GameObject objectPanel;
@@ -42,7 +44,6 @@ public class UISystem : MonoBehaviour
         }
 
         ResolveDisplayReferences();
-        CacheImageRectDefaults();
     }
 
     private void ResolveDisplayReferences()
@@ -76,7 +77,7 @@ public class UISystem : MonoBehaviour
         _hasCachedImageRect = true;
     }
 
-    private void ConfigureDisplayImage(Sprite photo)
+    private void ConfigureDisplayImage()
     {
         if (displayImage == null)
         {
@@ -123,7 +124,7 @@ public class UISystem : MonoBehaviour
             displayImage.sprite = spriteToShow;
             displayImage.enabled = photo != null;
             displayImage.color = new Color(1f, 1f, 1f, 1f);
-            ConfigureDisplayImage(spriteToShow);
+            ConfigureDisplayImage();
 
             if (photo != null)
             {
@@ -148,6 +149,7 @@ public class UISystem : MonoBehaviour
                 displayImage.gameObject.SetActive(true);
             }
         }
+        DisplayStateChanged?.Invoke(true);
         if (displayText != null) displayText.text = message;
     }
 
@@ -299,6 +301,8 @@ public class UISystem : MonoBehaviour
         {
             objectPanel.SetActive(false);
         }
+
+        DisplayStateChanged?.Invoke(false);
 
         if (GameManager.Instance != null)
         {

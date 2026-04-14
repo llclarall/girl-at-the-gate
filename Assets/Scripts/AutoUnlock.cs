@@ -12,8 +12,10 @@ public class AutoUnlock : MonoBehaviour
 
         if (door != null)
         {
-            door.Unlock(); 
+            door.Unlock();
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             Debug.Log("La porte du cimetière a été déverrouillée automatiquement au lancement.");
+#endif
         }
     }
 }

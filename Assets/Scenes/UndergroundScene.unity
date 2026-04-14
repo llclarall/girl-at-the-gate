@@ -1157,7 +1157,7 @@ MonoBehaviour:
     text: "Michael\u2026? Il ne viendra pas Suzanne. Mais\u2026 tu n\u2019as plus
       besoin d\u2019attendre. Ce qui te retenait ici\u2026 c\u2019est fini maintenant."
   - name: Susan
-    text: "Ah\u2026\xE7a veut dire que e peux enfin partir ?"
+    text: "Ah\u2026\xE7a veut dire que je peux enfin partir ?"
   - name: Terence
     text: "Oui, tu peux sortir d\u2019ici. Tu es libre maintenant. Tu peux enfin
       te reposer, ma petite."
@@ -3413,8 +3413,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "C'est la partie manquante de la photo...\"Suzanne\", \u201CMichael et
-    Suzanne\u201D. L\u2019ex gardien et la petite fille morte ont donc un lien ?!\n"
+  m_text: "C'est la partie manquante de la photo...\"Susan\", \u201CMichael et Susan\u201D.
+    L\u2019ex gardien et la petite fille morte ont donc un lien ?!\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 252f52320dba3ad4daac0b9d5b3924da, type: 2}
   m_sharedMaterial: {fileID: 6923326353711512619, guid: 252f52320dba3ad4daac0b9d5b3924da, type: 2}

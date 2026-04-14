@@ -1,5 +1,4 @@
 using UnityEngine;
-using StarterAssets;
 
 /// <summary>
 /// This script manages the locked chest in the underground scene. It allows the player to interact with the chest, enter a code to unlock it, and then reveals the contents of the chest if the correct code is entered. It also handles showing a highlight when the player can interact with the chest and plays a sound effect upon interaction.
@@ -8,26 +7,18 @@ using StarterAssets;
 public class ChestLock : MonoBehaviour, IInteractable
 {
     [SerializeField] private GameObject highlightHalo;
-    public GameObject codePanel;
-    public string correctCode = "8267"; 
-    public GameObject itemInside;
+    [SerializeField] private GameObject codePanel;
+    public string correctCode = "8267";
+    [SerializeField] private GameObject itemInside;
 
     [Header("Contenu à afficher au déverrouillage")]
-    public Sprite treasureImage;
-    [TextArea] public string treasureText;
-    public GameObject obstacleToDisable;
+    [SerializeField] private Sprite treasureImage;
+    [SerializeField, TextArea] private string treasureText;
+    [SerializeField] private GameObject obstacleToDisable;
 
     private bool isOpened = false;
-    private StarterAssetsInputs _input;
-    private bool _previousCursorInputForLook;
-    private bool _previousOscMovementEnabled;
-    public AudioSource chestAudioSource;
-    public AudioClip interactionSound;
-
-    private void Start()
-    {
-        _input = FindFirstObjectByType<StarterAssetsInputs>();
-    }
+    [SerializeField] private AudioSource chestAudioSource;
+    [SerializeField] private AudioClip interactionSound;
 
     public void Interact()
     {
@@ -40,7 +31,9 @@ public class ChestLock : MonoBehaviour, IInteractable
             if (chestAudioSource != null && interactionSound != null)
             {
                 chestAudioSource.PlayOneShot(interactionSound);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
                 Debug.Log("Son d'interaction joué !");
+#endif
             }
         }
     }
@@ -49,12 +42,16 @@ public class ChestLock : MonoBehaviour, IInteractable
     {
         if (inputCode == correctCode)
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             Debug.Log("Code Bon !");
+#endif
             OpenChest();
         }
         else
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             Debug.Log("Mauvais code...");
+#endif
         }
     }
 
