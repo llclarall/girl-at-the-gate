@@ -19,7 +19,7 @@ public class OscInputRuntimeBridge : MonoBehaviour
     [SerializeField] private int listenPort = 9000;
     [SerializeField] private bool verboseLogs;
     [SerializeField] private float axisDeadZone = 0.08f;
-    [SerializeField] private bool invertVerticalAxis;
+    [SerializeField] private bool invertVerticalAxis = true;
     [SerializeField] private bool axisUsesZeroToOneRange;
     [SerializeField] private bool autoStopWhenAxisIdle = true;
     [SerializeField] private float axisIdleTimeout = 0.2f;
