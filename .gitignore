@@ -27,8 +27,8 @@
 # /[Aa]ssets/AssetStoreTools*
 
 # Ignore aly folder in Assets
-/[Aa]ssets/Assets aly/
-/[Aa]ssets/Prefabs/
+#/[Aa]ssets/Assets aly/
+#/[Aa]ssets/Prefabs/
 
 /[Pp]rojectSettings/
 
